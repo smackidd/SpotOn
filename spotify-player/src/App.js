@@ -48,7 +48,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      
+        {/*menu bar component */}
+        {/*Grid layout */}
+          {/* column 1 component or filter component accordian */}
+          {/* column 2 options column */}
+          {/* column 3 output playlist column*/}
+        {/* close grid layout */}
         <Button
           href="http://localhost:8888"
           variant="contained" 
