@@ -4,13 +4,16 @@ import './App.css';
 import Button from '@material-ui/core/Button';
 import Spotify from 'spotify-web-api-js';
 
+import Menu from './components/Menu/Menu';
+import Content from './components/Content/Content';
+
 const spotifyWebApi = new Spotify();
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     const params = this.getHashParams();
-    this.state={
+    this.state = {
       loggedIn: params.access_token ? true : false,
       token: params.access_token,
       nowPlaying: {
@@ -18,7 +21,7 @@ class App extends Component {
         image: ''
       }
     }
-    if (params.access_token){
+    if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
     }
   }
@@ -26,14 +29,14 @@ class App extends Component {
   getHashParams() {
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-    while ( e = r.exec(q)) {
+      q = window.location.hash.substring(1);
+    while (e = r.exec(q)) {
       hashParams[e[1]] = decodeURIComponent(e[2]);
     }
     return hashParams;
   }
 
-  getNowPlaying(){
+  getNowPlaying() {
     spotifyWebApi.getMyCurrentPlaybackState()
       .then((response) => {
         this.setState({
@@ -47,34 +50,37 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {/*menu bar component */}
-        {/*Grid layout */}
-          {/* column 1 component or filter component accordian */}
-             {/* activity button (creates list of activities*/}
-             {/* genre button (creates list of genres)*/}
-             {/* mood button */}
-             {/* fine tune button (creates 3 sliders) */}
-          {/* column 2 options column */}
-          {/* column 3 output playlist column*/}
-        {/* close grid layout */}
-        <Button
-          href="http://localhost:8888"
-          variant="contained" 
-          color="primary">
-          LogIn
-        </Button>
-        <div>Now Playing: { this.state.nowPlaying.name }</div>
-        <div>
-          <img src = {this.state.nowPlaying.image} style={{width: 100}}/>
-        </div>
-        <Button 
-          onClick={() => this.getNowPlaying()} 
-          variant="contained"
-          color="secondary">
-            Check Now Playing
-        </Button>
+
+      <div style={{ margin: "10px 10px", }}>
+        <Menu />
+        <br />
+        <Content />
+
+      
+
       </div>
+
+
+
+      // <div className="App">
+
+      //   <Button
+      //     href="http://localhost:8888"
+      //     variant="contained" 
+      //     color="primary">
+      //     LogIn
+      //   </Button>
+      //   <div>Now Playing: { this.state.nowPlaying.name }</div>
+      //   <div>
+      //     <img src = {this.state.nowPlaying.image} style={{width: 100}}/>
+      //   </div>
+      //   <Button 
+      //     onClick={() => this.getNowPlaying()} 
+      //     variant="contained"
+      //     color="secondary">
+      //       Check Now Playing
+      //   </Button>
+      // </div>
     );
   }
 }
