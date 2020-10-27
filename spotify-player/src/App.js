@@ -50,10 +50,14 @@ class App extends Component {
 
   render() {
     return (
+
       <div style={{ margin: "10px 10px", }}>
         <Menu />
         <br />
         <Content />
+
+      
+
       </div>
 
 
