@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
@@ -7,8 +7,10 @@ const useStyles = makeStyles((theme) => ({
         height: 140,
         width: "100%",
         display: "block",
-        border: "Black solid 1px",
-        boxShadow: "5px 10px lightgrey",
+        color: "white",
+        //border: "Black solid 1px",
+        backgroundColor: "#555",
+        boxShadow: "2px 2px lightgrey",
         textAlign: "center",
     },
 }));

@@ -15,26 +15,52 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SpacingGrid() {
+export default function SpacingGrid({showActivities, onShowActivities, searchPlaylists, songListPreview}) {
     const classes = useStyles();
+
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleChange = (panel) => (event, isExpanded) => {
+        console.log("handleChange");
+        setExpanded(isExpanded ? panel : false);
+    };
+    
+    const changeExpanded = (panel) => {
+        setExpanded(!expanded);
+    }
 
     return (
         <div>
-            <Grid container className={classes.root} justify="center" spacing={2}>
+            <Grid 
+                container 
+                className={classes.root} 
+                justify="center" 
+                spacing={1}
+                
+                
+                >
                 {/* {[0, 1, 2].map((value) => (
                     <Grid key={value} item>
                         <Paper className={classes.paper} />
                     </Grid>
                 ))} */}
-                <Grid item className={classes.griditem}>
-                    <Grid1 />
+                <Grid item xs={12} sm={3} className={classes.griditem}>
+                    <Grid1 
+                        onShowActivities={onShowActivities} 
+                        expanded={expanded}
+                        handleChange={() => changeExpanded()}
+                    />
                 </Grid>
-                <Grid item className={classes.griditem}>
-                    <Grid container justify="center" style={{ flexGrow: 1, }} spacing={2}>
-                        <Grid2 />
-                    </Grid>
+                <Grid item xs={12} sm={5} className={classes.griditem}>
+                    <Grid2 
+                        showActivities={showActivities}
+                        onShowActivities={onShowActivities} 
+                        searchPlaylists={searchPlaylists}
+                        handleChange={() => changeExpanded()}
+                        songListPreview={songListPreview}
+                    />
                 </Grid>
-                <Grid item className={classes.griditem}>
+                <Grid item xs={12} sm={4} className={classes.griditem}>
                     <Grid3 name="Grid3" />
                 </Grid>
             </Grid>

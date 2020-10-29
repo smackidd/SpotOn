@@ -25,26 +25,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Grdi1() {
+export default function Grid1({onShowActivities, handleChange, expanded}) {
     const classes = useStyles();
+
+    
 
     return (
         <div className={classes.root}>
-            <Accordion>
+            <Accordion 
+                name="Activities"
+                expanded={expanded} 
+                onChange={() => handleChange()} 
+                onClick={() => onShowActivities()}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.summary}>
                     <Typography
                         className={classes.heading}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            alert("Hello");
-                        }}
+                        // onClick={(event) => {
+                        //     event.stopPropagation();
+                        //     alert("Hello");
+                        // }}
                     >
                         Choose Activity
-                </Typography>
+                    </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography className={classes.details}>
-                        Choose upto 3
+                        Choose 1
                     </Typography>
                 </AccordionDetails>
             </Accordion>
@@ -52,7 +58,7 @@ export default function Grdi1() {
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.summary}>
                     <Typography
                         className={classes.heading}
-                        onClick={(event) => { event.stopPropagation() }}
+                        //onClick={(event) => { event.stopPropagation() }}
                     >
                         Choose Genre
                     </Typography>
@@ -67,7 +73,7 @@ export default function Grdi1() {
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.summary}>
                     <Typography
                         className={classes.heading}
-                        onClick={(event) => { event.stopPropagation() }}
+                        //onClick={(event) => { event.stopPropagation() }}
                     >
                         Choose Era
                     </Typography>

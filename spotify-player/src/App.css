@@ -38,3 +38,12 @@
     transform: rotate(360deg);
   }
 }
+
+#tempList {
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+
+.track {
+  margin: 1px;
+}

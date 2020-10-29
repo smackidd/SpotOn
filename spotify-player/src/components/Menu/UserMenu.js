@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
     userButton: {
         color: 'white',
+        marginLeft: 10,
         textTransform: 'capitalize',
         fontSize: '110%',
         fontWeight: 'Bold',
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function UserMenu() {
+export default function UserMenu({loggedIn, userInfo}) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -50,6 +51,7 @@ export default function UserMenu() {
         }
     }
 
+    
     // return focus to the button when we transitioned from !open -> open
     const prevOpen = React.useRef(open);
     React.useEffect(() => {
@@ -63,16 +65,26 @@ export default function UserMenu() {
     return (
         <div className={classes.root}>
             <div>
-                <Button
-                    ref={anchorRef}
-                    aria-controls={open ? 'menu-list-grow' : undefined}
-                    aria-haspopup="true"
-                    onClick={handleToggle}
-                    className={classes.userButton}
-                    variant="outlined"
-                >
-                    User
-                </Button>
+            <Button 
+                href="http://localhost:8888"
+                variant="outlined"
+                className={classes.userButton}
+                style={loggedIn ? {display: 'none'} : {}}
+            >
+                Log In
+            </Button>
+            <Button
+                ref={anchorRef}
+                aria-controls={open ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                onClick={handleToggle}
+                style={loggedIn ? {} : { display: 'none' }}
+                className={classes.userButton}
+                variant="outlined"
+            >
+                {userInfo}
+            </Button>
+                
                 <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow

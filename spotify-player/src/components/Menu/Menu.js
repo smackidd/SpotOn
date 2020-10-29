@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function MenuBar() {
+export default function MenuBar({loggedIn, userInfo}) {
     const classes = useStyles();
 
     return (
@@ -36,7 +36,7 @@ export default function MenuBar() {
                     </Typography>
                     {/* <Button color="inherit">Login</Button> */}
                     <Typography>
-                        <UserMenu />
+                        <UserMenu loggedIn={loggedIn} userInfo={userInfo}/>
                     </Typography>
                 </Toolbar>
             </AppBar>

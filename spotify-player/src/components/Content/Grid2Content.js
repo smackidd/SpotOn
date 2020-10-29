@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "Center",
         margin: "0px 5px",
         padding: "10px 0px",
-        boxShadow: "5px 5px lightgrey",
+        boxShadow: "2px 2px lightgrey",
         borderRadius: "5px",
     },
     rootgrid: {
@@ -34,8 +34,8 @@ export default function Grid2Content(props) {
                     <div>
                         <div>
                             <img
-                                src={props.image1}
-                                alt={props.image1name}
+                                src={props.image}
+                                alt={props.imageName}
                                 class="img-responsive"
                                 height="100"
                                 width="100"
@@ -46,43 +46,10 @@ export default function Grid2Content(props) {
                         </div>
                     </div>
                     <div>
-                        {props.image1name}
+                        {props.imageName}
                     </div>
                 </Grid>
-                <Grid item className={classes.griditem}>
-                    <div>
-                        <img
-                            src={props.image2}
-                            alt={props.image2name}
-                            class="img-responsive"
-                            height="100"
-                            width="100"
-                            style={{
-                                objectFit: "cover",
-                            }}
-                        />
-                    </div>
-                    <div>
-                        {props.image2name}
-                    </div>
-                </Grid>
-                <Grid item className={classes.griditem}>
-                    <div>
-                        <img
-                            src={props.image3}
-                            alt={props.image3name}
-                            class="img-responsive"
-                            height="100"
-                            width="100"
-                            style={{
-                                objectFit: "cover",
-                            }}
-                        />
-                    </div>
-                    <div>
-                        {props.image3name}
-                    </div>
-                </Grid>
+               
             </Grid>
         </Grid>
     );
