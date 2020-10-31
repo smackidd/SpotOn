@@ -15,7 +15,23 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function SpacingGrid({showActivities, onShowActivities, searchPlaylists, songListPreview}) {
+export default function SpacingGrid(
+    {
+        showActivities, 
+        onShowActivities, 
+        searchPlaylists, 
+        songListPreview, 
+        playSong, 
+        clearPlaylist, 
+        deleteTrackPreview, 
+        addSong,
+        transferSize,
+        finalList,
+        transferPlaylist,
+        clearFinalPlaylist,
+        deleteTrackFinal,
+        savePlaylistToLibrary
+    }) {
     const classes = useStyles();
 
     const [expanded, setExpanded] = React.useState(false);
@@ -35,7 +51,7 @@ export default function SpacingGrid({showActivities, onShowActivities, searchPla
                 container 
                 className={classes.root} 
                 justify="center" 
-                spacing={1}
+                spacing={2}
                 
                 
                 >
@@ -58,10 +74,23 @@ export default function SpacingGrid({showActivities, onShowActivities, searchPla
                         searchPlaylists={searchPlaylists}
                         handleChange={() => changeExpanded()}
                         songListPreview={songListPreview}
+                        playSong={playSong} 
+                        clearPlaylist={clearPlaylist}
+                        deleteTrackPreview={deleteTrackPreview}
+                        addSong={addSong}
+                        transferSize={transferSize}
+                        transferPlaylist={transferPlaylist}
                     />
                 </Grid>
                 <Grid item xs={12} sm={4} className={classes.griditem}>
-                    <Grid3 name="Grid3" />
+                    <Grid3 
+                        name="Grid3"
+                        playSong={playSong}
+                        finalList={finalList}
+                        clearFinalPlaylist={clearFinalPlaylist}
+                        deleteTrackFinal={deleteTrackFinal}
+                        savePlaylistToLibrary={savePlaylistToLibrary}
+                    />
                 </Grid>
             </Grid>
         </div >

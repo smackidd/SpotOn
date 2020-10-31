@@ -17,19 +17,27 @@ import Grid2Content from './Grid2Content';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        //width: '100%',
+        width: '100%',
         maxWidth: 360,
     },
     grid: {
-        //flexGrow: 1,
+        flexGrow: 1,
     },
     griditem: {
-        //flexGrow: 1,
+        flexGrow: 1,
         textAlign: "Center",
         margin: "0px 5px",
         padding: "10px 0px",
         boxShadow: "5px 5px lightgrey",
         borderRadius: "5px",
+    },
+    list: {
+        width: '25vw',
+        marginLeft: 50
+    },
+    editButtons: {
+        fontSize: 8,
+        width: 40,
     },
     rootgrid: {
         marginTop: "5px",
@@ -40,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Grid2(props){
+    const [edit, showEdit] = React.useState(false);
     
         
     const image = [{
@@ -74,6 +83,10 @@ export default function Grid2(props){
         
     }
 
+    function editPlaylist() {
+        showEdit(!edit);
+    }
+
 
     const classes = useStyles();
     return (
@@ -96,44 +109,57 @@ export default function Grid2(props){
                         <GridListTileBar title={pic.imageName} />
                     </GridListTile>
                 ))}
-            </GridList>
-            <p>Preview List: {props.songListPreview.length} songs</p>
-            <ButtonGroup variant="text" color="secondary">
-            <Button /*onClick={() => this.transferPlaylist()}*/>Transfer {/*this.state.transferSize*/}</Button><br/>
-            <Button /*onClick={() => this.editPlaylist()}*/>Edit</Button>
-            <Button /*onClick={() => this.clearPlaylist()}*/>Clear</Button>
-            </ButtonGroup>
-              
-            <div id="tempList" style={props.showActivities ? {display: 'none'} : {}}>
-            
-                {props.songListPreview.map((song) => {
-                    return (
-                    <ButtonGroup className="track" variant="outlined" size="small">
-                        {/* <Button 
-                        disabled={this.state.edit} 
-                        color="secondary"
-                        onClick={() => this.deleteTrackPreview(song.id)}
+            </GridList >
+            <div style={props.showActivities ? {display: 'none'} : {}}>
+                <p>Preview List: {props.songListPreview.length} songs</p>
+                <ButtonGroup variant="text" color="secondary">
+                <Button onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>
+                <Button onClick={() => editPlaylist()}>Edit</Button>
+                <Button onClick={() => props.clearPlaylist()}>Clear</Button>
+                </ButtonGroup>
+                
+                <div id="tempList">
+                
+                    {props.songListPreview.map((song) => {
+                        return (
+                        <ButtonGroup 
+                            className="track" 
+                            variant="outlined" 
+                            
+                            size="small"
                         >
-                        Delete</Button>
-                        <Button  
-                        disabled={this.state.edit} 
-                        color="inherit"
-                        onClick={() => this.addSong(song.id)}
-                        >
-                        Add</Button> */}
-                        <Button  
-                        key={song.id}
-                        variant="contained"
-                        color="primary"
-                        
-                        onClick={() => this.playSong(song.id)}
-                        >
-                        <div>{song.name} - {song.artist}</div>
-                        </Button>
-                    </ButtonGroup>
-                    )
-                })}
-            
+                            <Button 
+                            style={edit ? {} : {display: 'none'}}
+                            className={classes.editButtons}
+                            variant="contained" 
+                            color="secondary"
+                            onClick={() => props.deleteTrackPreview(song.id)}
+                            >
+                            Delete</Button>
+                            <Button  
+                            style={edit ? {} : {display: 'none'}}
+                            className={classes.editButtons}
+                            variant="contained" 
+                            color="inherit"
+                            onClick={() => props.addSong(song.id)}
+                            >
+                            Add</Button>
+                            <Button  
+                            key={song.id}
+                            variant="outlined"
+                            color="primary"
+                            justify-content="center" 
+                            className={classes.list}
+                            //style={{ flexGrow: 1, width: '80%', marginLeft: 20}}
+                            onClick={() => props.playSong(song.id)}
+                            >
+                            <div>{song.name} - {song.artist}</div>
+                            </Button>
+                        </ButtonGroup>
+                        )
+                    })}
+                
+                </div>
             </div>
         </Grid>
 
