@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import './App.css';
 import Button from '@material-ui/core/Button';
 import Spotify from 'spotify-web-api-js';
+import axios from 'axios';
 
 import Menu from './components/Menu/Menu';
 import Content from './components/Content/Content';
+
 
 const spotifyWebApi = new Spotify();
 
@@ -20,14 +22,14 @@ class App extends Component {
     this.state = {
       loggedIn: params.access_token ? true : false,
       token: params.access_token,
+      display: false,
       showActivities: false,
+      showGenres: false,
       transferSize: 50,
       maxTransferSize: 50,
-      nowPlaying: {
-        name: 'Not Checked',
-        image: ''
-      },
       user: [],
+      query: [],
+      searchName: '',
       playlists: [
         {
           name: '', 
@@ -55,7 +57,19 @@ class App extends Component {
     
   }
 
-  
+  componentDidUpdate(prevProps, prevState){
+    if (prevState.searchName !== this.state.searchName){
+      let data = {
+        "userId": this.state.user.userID,
+	      "searchString": this.state.query,
+	      "searchQuery": this.state.searchName  
+      }
+      console.log(data);
+      axios.post("http://localhost:5005/searchhistory/", data).then((res) => {
+        console.log(res.data);
+      });
+    }
+  }
 
   getHashParams() {
     var hashParams = {};
@@ -67,22 +81,24 @@ class App extends Component {
     return hashParams;
   }
 
-  getNowPlaying() {
-    spotifyWebApi.getMyCurrentPlaybackState()
-      .then((response) => {
-        this.setState({
-          nowPlaying: {
-            name: response.item.name,
-            image: response.item.album.images[0].url
-          }
-        })
-      })
-  }
+  // getNowPlaying() {
+  //   spotifyWebApi.getMyCurrentPlaybackState()
+  //     .then((response) => {
+  //       this.setState({
+  //         nowPlaying: {
+  //           name: response.item.name,
+  //           image: response.item.album.images[0].url
+  //         }
+  //       })
+  //     })
+  // }
 
   searchPlaylists = (query) => {
+    this.setState({query: [...this.state.query, query]})
+    
     spotifyWebApi.searchPlaylists(query, {limit: 20})
       .then((response) => {
-        console.log(response)
+        console.log(response.playlists.items);
         this.setState({playlists: []})
         
         response.playlists.items.map((playlist) => {
@@ -160,8 +176,14 @@ class App extends Component {
   }
 
   //toggles the display of the Activities in Column 2
+  
+
   onShowActivities = () => {
     this.setState({showActivities: !this.state.showActivities})
+  }
+
+  onShowGenres = () => {
+    this.setState({showGenres: !this.state.showGenres})
   }
 
   playSong = (id) => {
@@ -171,7 +193,7 @@ class App extends Component {
   }
 
   clearPlaylist = () => {
-    this.setState({songListPreview: []},
+    this.setState({songListPreview: [], query: []},
       () => this.transferSize());
   }
 
@@ -263,6 +285,12 @@ class App extends Component {
 
   }
 
+  saveSearchHistory = (searchName) => {
+    this.setState({searchName: searchName})
+  }
+
+
+
   render() {
     return (
       
@@ -273,8 +301,13 @@ class App extends Component {
         />
         <br />
         <Content 
-          onShowActivities={this.onShowActivities}
-          showActivities={this.state.showActivities}
+          handleDisplay={(event) => this.handleDisplay(event)}
+          isDisplayed={this.state.display}
+          user={this.state.user}
+          //onShowActivities={this.onShowActivities}
+          //showActivities={this.state.showActivities}
+          //onShowGenres={this.onShowGenres}
+          //showGenres={this.state.showGenres}
           searchPlaylists={this.searchPlaylists}
           songListPreview={this.state.songListPreview}
           playSong={this.playSong}
@@ -287,6 +320,7 @@ class App extends Component {
           clearFinalPlaylist={this.clearFinalPlaylist}
           deleteTrackFinal={this.deleteTrackFinal}
           savePlaylistToLibrary={this.savePlaylistToLibrary}
+          saveSearchHistory={(name) => this.saveSearchHistory(name)}
         />
         
       

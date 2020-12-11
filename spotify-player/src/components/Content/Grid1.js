@@ -25,18 +25,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Grid1({onShowActivities, handleChange, expanded}) {
+export default function Grid1({ handleDisplay, isDisplayed,/*onShowActivities, onShowGenres,*/ handleChange, expanded}) {
     const classes = useStyles();
 
+    
     
 
     return (
         <div className={classes.root}>
             <Accordion 
                 name="Activities"
-                expanded={expanded} 
-                onChange={() => handleChange()} 
-                onClick={() => onShowActivities()}>
+                expanded={expanded === 'panel1'} 
+                onChange={handleChange('panel1')} 
+                //onClick={handleChange('panel1')}
+                >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.summary}>
                     <Typography
                         className={classes.heading}
@@ -54,7 +56,12 @@ export default function Grid1({onShowActivities, handleChange, expanded}) {
                     </Typography>
                 </AccordionDetails>
             </Accordion>
-            <Accordion>
+            <Accordion
+                name="genres"
+                expanded={expanded === 'panel2'} 
+                onChange={handleChange('panel2')}
+                //onClick={handleChange('panel2')}
+                >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.summary}>
                     <Typography
                         className={classes.heading}

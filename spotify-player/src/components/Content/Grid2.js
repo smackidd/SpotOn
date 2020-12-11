@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -6,6 +8,17 @@ import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+
+
 import Road_Trip from '../../images/road_trip.jpg';
 import Running from '../../images/running.jpg';
 import Walking from '../../images/walking.jpg';
@@ -49,7 +62,33 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Grid2(props){
     const [edit, showEdit] = React.useState(false);
-    
+    const [genres, setGenres] = React.useState({
+        Rock: false,
+        Jazz: false,
+        Electronica: false,
+        Pop: false,
+        Classical: false,
+        Reggae: false,
+        HipHop: false,
+        RandB: false,
+        Chill: false,
+        LoFi: false,
+      });
+    const [queries, setQueries] = React.useState([]);
+    const [saveSearch, setSaveSearch] = React.useState(false);
+    const [searchName, submitName] = React.useState('');
+    const [searchHistory, setSearchHistory] = React.useState([]);
+    //const [loadSearch, setLoadSearch] = React.useState([]);
+
+    React.useEffect(() => {
+        axios.get("http://localhost:5005/searchhistory")
+            .then((res) => {
+                console.log("props.user.userID", props.user.userID, "res.data", res.data[0].userId);
+                const search = res.data.filter((id) => id.userId == props.user.userID);
+                setSearchHistory(search);
+            })
+    }, [props.user]);
+
         
     const image = [{
         image: Road_Trip,
@@ -77,26 +116,105 @@ export default function Grid2(props){
     }]
 
     function onHandleActivities(query) {
-        props.handleChange();
-        props.onShowActivities();
+        console.log("onHandleActivities", props);
+        props.setExpanded(false);
+        
         props.searchPlaylists(query);
         
+    }
+
+    function onHandleGenres(){
+        props.setExpanded(false);
+        let searchTerm = '';
+        queries.forEach((query) => {
+            searchTerm = searchTerm + query + " OR ";
+        })
+        const index = searchTerm.lastIndexOf(" OR ");
+        searchTerm = searchTerm.slice(0,index);
+        props.searchPlaylists(searchTerm);
+        console.log(genres, queries);
     }
 
     function editPlaylist() {
         showEdit(!edit);
     }
 
+    const handleChange = (event) => {
+        if (event.target.checked == true) setQueries([...queries, event.target.value]);
+        else {
+            
+            let array = [...queries];
+            let newArray = array.filter((query) => query != event.target.value);
+            console.log(event.target.value, newArray);
+            setQueries(newArray);  
+        }
+        setGenres({ ...genres, [event.target.name]: event.target.checked });
+    };
+
+    const { Rock, 
+            Jazz, 
+            Electronica, 
+            Pop, 
+            Classical,
+            Reggae,
+            HipHop,
+            RandB,
+            Chill,
+            LoFi } = genres;
+
+    const error = [
+        Rock, 
+        Jazz, 
+        Electronica, 
+        Pop, 
+        Classical,
+        Reggae,
+        HipHop,
+        RandB,
+        Chill,
+        LoFi
+    ].filter((v) => v).length > 3;
+
+    function handleSaveSearch(){
+        setSaveSearch(!saveSearch);
+    }
+
+    const handleSavedSearches = (event) => {
+        // setLoadSearch(event.target.value)
+        // console.log("loadSearch", loadSearch);
+        let search = searchHistory.filter((s) => s._id == event.target.value);
+        console.log("search", search);
+        let loadSearch = [];
+        search[0].searchString.forEach((s) => {
+            let sarray = s.split(" OR ");
+            console.log("sarray", sarray);
+            sarray.forEach((a) => {
+                console.log("a",a);
+                loadSearch.push(a);
+            })
+            console.log("loadSearch", loadSearch); 
+        })
+        console.log("loadSearch", loadSearch);
+        loadSearch.forEach((s) => props.searchPlaylists(s));
+    }
+
+    const onSearchName = (event) => {
+        submitName(event.target.value);
+    }
 
     const classes = useStyles();
+    
     return (
         <Grid container justify="center" style={{ flexGrow: 1, }} spacing={1}>
+
+            {/*This displays the Activities*/}
+
             <GridList 
                 cellHeight={160} 
                 justify="center" 
                 className={classes.root} 
                 cols={3}
-                style={props.showActivities ? {} : {display: 'none'}}
+                style={props.expanded === 'panel1' ? {} : {display: 'none'}}
             >
                 {image.map((pic) => (
                     <GridListTile 
@@ -110,13 +228,135 @@ export default function Grid2(props){
                     </GridListTile>
                 ))}
             </GridList >
-            <div style={props.showActivities ? {display: 'none'} : {}}>
+
+            {/*this displays the genres*/}
+
+            <GridList
+                cellHeight={500}
+                justify="center" 
+                className={classes.root}
+                style={props.expanded === 'panel2' ? {} : {display: 'none'}}
+            >
+                <FormControl error={error} component="fieldset" className={classes.formControl}>
+                    <FormLabel component="legend">Pick Up to Three Genres</FormLabel>
+                    <FormGroup>
+                        <FormControlLabel
+                            control={<Checkbox checked={Rock} onChange={handleChange} name="Rock" value="Rock" />}
+                            label="Rock"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={Jazz} onChange={handleChange} name="Jazz" value="Jazz" />}
+                            label="Jazz"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={Electronica} onChange={handleChange} name="Electronica" value="Electronica" />}
+                            label="Electronica"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={Pop} onChange={handleChange} name="Pop" value="Pop"/>}
+                            label="Pop"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={Classical} onChange={handleChange} name="Classical" value="Classical" />}
+                            label="Classical"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={Reggae} onChange={handleChange} name="Reggae" value="Reggae" />}
+                            label="Reggae"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={HipHop} onChange={handleChange} name="HipHop" value="Hip-hop"/>}
+                            label="Hip-Hop"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={RandB} onChange={handleChange} name="RandB" value="R&B" />}
+                            label="R&B"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={Chill} onChange={handleChange} name="Chill" value="Chill" />}
+                            label="Chill"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={LoFi} onChange={handleChange} name="LoFi" value="LoFi" />}
+                            label="LoFi"
+                        />
+                    </FormGroup>
+                    <FormHelperText style={error ? {} : {display: 'none'}}>Choose 3 or less</FormHelperText>
+                    <Button 
+                        disabled={error}
+                        variant="contained" 
+                        size="small" 
+                        color="primary"
+                        type="Submit"
+                        onClick={() => onHandleGenres()}
+                    >Apply</Button>
+                </FormControl>
+                
+            </GridList>
+            <div style={props.expanded === false ? {} : {display: 'none'}}>
                 <p>Preview List: {props.songListPreview.length} songs</p>
                 <ButtonGroup variant="text" color="secondary">
-                <Button onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>
-                <Button onClick={() => editPlaylist()}>Edit</Button>
-                <Button onClick={() => props.clearPlaylist()}>Clear</Button>
+                    <Button onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>
+                    <Button onClick={() => editPlaylist()}>Edit</Button>
+                    <Button onClick={() => props.clearPlaylist()}>Clear</Button>
                 </ButtonGroup>
+                <div>
+                    <span>
+                        <Button 
+                            variant="contained"
+                            color="inherit"
+                            style={{margin: "10px"}}
+                            onClick={() => handleSaveSearch()}
+                        >Save Query</Button> 
+                        <FormControl className={classes.formControl}>
+                            <InputLabel 
+                                //htmlFor="select"
+                                style={{marginLeft: "30px", fontSize: "15px"}}
+                                >Saved Searches</InputLabel>
+                            <Select
+                                native
+                                id="select"
+                                //value={loadSearch}
+                                onChange={handleSavedSearches}
+                                name="Saved Searches"
+                                style={{marginLeft: "30px", minWidth: 200}}
+                                >
+                                <option aria-label="None" value="" />
+                                {searchHistory.map((search) => (
+                                    <option 
+                                        value={search._id}
+                                        aria-label={search.searchQuery}
+                                    >{search.searchQuery}</option>
+                                ))}
+                                {/* <option value={10}>Ten</option>
+                                <option value={20}>Twenty</option>
+                                <option value={30}>Thirty</option> */}
+                            </Select>
+                        </FormControl>   
+                    </span>
+                </div>
+                
+                
+                <span style={saveSearch ? {} : {display: 'none'}}>
+                    <TextField 
+                            label='Playlist Name'
+                            size="small"
+                            color="secondary"
+                            required
+                            onChange={(e) => onSearchName(e)}
+                        />
+                    <ButtonGroup variant="contained" size="small" style={{margin: 10}}>
+                        <Button 
+                            color="primary"
+                            onClick={() => props.saveSearchHistory(searchName)}
+                        >submit</Button>
+                        <Button 
+                            color="inherit"
+                            style={{color: "#333"}}
+                            onClick={() => handleSaveSearch()}
+                        >cancel</Button> 
+                    </ButtonGroup>
+                    </span> 
                 
                 <div id="tempList">
                 

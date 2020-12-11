@@ -17,8 +17,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SpacingGrid(
     {
-        showActivities, 
-        onShowActivities, 
+        handleDisplay,
+        isDisplayed,
+        user,
+        //showActivities, 
+        //onShowActivities,
+        //showGenres,
+        //onShowGenres, 
         searchPlaylists, 
         songListPreview, 
         playSong, 
@@ -30,18 +35,21 @@ export default function SpacingGrid(
         transferPlaylist,
         clearFinalPlaylist,
         deleteTrackFinal,
-        savePlaylistToLibrary
+        savePlaylistToLibrary,
+        saveSearchHistory
     }) {
     const classes = useStyles();
 
     const [expanded, setExpanded] = React.useState(false);
 
     const handleChange = (panel) => (event, isExpanded) => {
-        console.log("handleChange");
+        console.log("handleChange", panel, isExpanded);
         setExpanded(isExpanded ? panel : false);
     };
+
     
-    const changeExpanded = (panel) => {
+    
+    const changeExpandedActivities = (panel) => {
         setExpanded(!expanded);
     }
 
@@ -55,24 +63,25 @@ export default function SpacingGrid(
                 
                 
                 >
-                {/* {[0, 1, 2].map((value) => (
-                    <Grid key={value} item>
-                        <Paper className={classes.paper} />
-                    </Grid>
-                ))} */}
+                
                 <Grid item xs={12} sm={3} className={classes.griditem}>
-                    <Grid1 
-                        onShowActivities={onShowActivities} 
+                    <Grid1
+                        //handleDisplay={(event) => handleDisplay(event)}
+                        //isDisplayed={isDisplayed} 
+                        //onShowActivities={onShowActivities}
+                        //onShowGenres={onShowGenres} 
                         expanded={expanded}
-                        handleChange={() => changeExpanded()}
+                        handleChange={(event) => handleChange(event)}
+                        //handleChangeGenres={() => changeExpandedGenres()}
                     />
                 </Grid>
                 <Grid item xs={12} sm={5} className={classes.griditem}>
-                    <Grid2 
-                        showActivities={showActivities}
-                        onShowActivities={onShowActivities} 
+                    <Grid2
+                        user={user}
+                        expanded={expanded}
+                        setExpanded={(expanded) => setExpanded(expanded)} 
                         searchPlaylists={searchPlaylists}
-                        handleChange={() => changeExpanded()}
+                        handleChange={(event) => handleChange(event)}
                         songListPreview={songListPreview}
                         playSong={playSong} 
                         clearPlaylist={clearPlaylist}
@@ -80,6 +89,7 @@ export default function SpacingGrid(
                         addSong={addSong}
                         transferSize={transferSize}
                         transferPlaylist={transferPlaylist}
+                        saveSearchHistory={saveSearchHistory}
                     />
                 </Grid>
                 <Grid item xs={12} sm={4} className={classes.griditem}>
