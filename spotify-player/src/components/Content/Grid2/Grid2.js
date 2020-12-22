@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import SaveQuery from '../Grid2/SaveQuery';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -14,17 +15,17 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
+
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 
 
-import Road_Trip from '../../images/road_trip.jpg';
-import Running from '../../images/running.jpg';
-import Walking from '../../images/walking.jpg';
-import Sleeping from '../../images/sleeping.jpg';
-import Cooking from '../../images/cooking.jpg';
-import Coding from '../../images/coding.jpg';
+import Road_Trip from '../../../images/road_trip.jpg';
+import Running from '../../../images/running.jpg';
+import Walking from '../../../images/walking.jpg';
+import Sleeping from '../../../images/sleeping.jpg';
+import Cooking from '../../../images/cooking.jpg';
+import Coding from '../../../images/coding.jpg';
 import Grid2Content from './Grid2Content';
 
 
@@ -75,9 +76,8 @@ export default function Grid2(props){
         LoFi: false,
       });
     const [queries, setQueries] = React.useState([]);
-    const [saveSearch, setSaveSearch] = React.useState(false);
-    const [searchName, submitName] = React.useState('');
     const [searchHistory, setSearchHistory] = React.useState([]);
+    
     //const [loadSearch, setLoadSearch] = React.useState([]);
 
     React.useEffect(() => {
@@ -175,32 +175,11 @@ export default function Grid2(props){
         LoFi
     ].filter((v) => v).length > 3;
 
-    function handleSaveSearch(){
-        setSaveSearch(!saveSearch);
-    }
+    
 
-    const handleSavedSearches = (event) => {
-        // setLoadSearch(event.target.value)
-        // console.log("loadSearch", loadSearch);
-        let search = searchHistory.filter((s) => s._id == event.target.value);
-        console.log("search", search);
-        let loadSearch = [];
-        search[0].searchString.forEach((s) => {
-            let sarray = s.split(" OR ");
-            console.log("sarray", sarray);
-            sarray.forEach((a) => {
-                console.log("a",a);
-                loadSearch.push(a);
-            })
-            console.log("loadSearch", loadSearch); 
-        })
-        console.log("loadSearch", loadSearch);
-        loadSearch.forEach((s) => props.searchPlaylists(s));
-    }
+    
 
-    const onSearchName = (event) => {
-        submitName(event.target.value);
-    }
+    
 
     const classes = useStyles();
     
@@ -296,67 +275,18 @@ export default function Grid2(props){
             <div style={props.expanded === false ? {} : {display: 'none'}}>
                 <p>Preview List: {props.songListPreview.length} songs</p>
                 <ButtonGroup variant="text" color="secondary">
-                    <Button onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>
+                    <Button  onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>
                     <Button onClick={() => editPlaylist()}>Edit</Button>
                     <Button onClick={() => props.clearPlaylist()}>Clear</Button>
                 </ButtonGroup>
-                <div>
-                    <span>
-                        <Button 
-                            variant="contained"
-                            color="inherit"
-                            style={{margin: "10px"}}
-                            onClick={() => handleSaveSearch()}
-                        >Save Query</Button> 
-                        <FormControl className={classes.formControl}>
-                            <InputLabel 
-                                //htmlFor="select"
-                                style={{marginLeft: "30px", fontSize: "15px"}}
-                                >Saved Searches</InputLabel>
-                            <Select
-                                native
-                                id="select"
-                                //value={loadSearch}
-                                onChange={handleSavedSearches}
-                                name="Saved Searches"
-                                style={{marginLeft: "30px", minWidth: 200}}
-                                >
-                                <option aria-label="None" value="" />
-                                {searchHistory.map((search) => (
-                                    <option 
-                                        value={search._id}
-                                        aria-label={search.searchQuery}
-                                    >{search.searchQuery}</option>
-                                ))}
-                                {/* <option value={10}>Ten</option>
-                                <option value={20}>Twenty</option>
-                                <option value={30}>Thirty</option> */}
-                            </Select>
-                        </FormControl>   
-                    </span>
-                </div>
+                <SaveQuery 
+                    searchHistory={searchHistory}
+                    saveSearchHistory={props.saveSearchHistory}
+                    searchPlaylists={props.searchPlaylists}
+                ></SaveQuery>
                 
                 
-                <span style={saveSearch ? {} : {display: 'none'}}>
-                    <TextField 
-                            label='Playlist Name'
-                            size="small"
-                            color="secondary"
-                            required
-                            onChange={(e) => onSearchName(e)}
-                        />
-                    <ButtonGroup variant="contained" size="small" style={{margin: 10}}>
-                        <Button 
-                            color="primary"
-                            onClick={() => props.saveSearchHistory(searchName)}
-                        >submit</Button>
-                        <Button 
-                            color="inherit"
-                            style={{color: "#333"}}
-                            onClick={() => handleSaveSearch()}
-                        >cancel</Button> 
-                    </ButtonGroup>
-                    </span> 
+                 
                 
                 <div id="tempList">
                 

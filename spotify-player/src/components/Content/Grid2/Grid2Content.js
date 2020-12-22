@@ -1,10 +1,10 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Gym from '../../images/gym.jpg';
-import Running from '../../images/running.jpg';
-import Walking from '../../images/walking.jpg';
-import Sleeping from '../../images/sleeping.jpg'
+// import Gym from '../../images/gym.jpg';
+// import Running from '../../images/running.jpg';
+// import Walking from '../../images/walking.jpg';
+// import Sleeping from '../../images/sleeping.jpg'
 
 const useStyles = makeStyles((theme) => ({
     grid: {

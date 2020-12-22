@@ -67,7 +67,8 @@ class App extends Component {
       console.log(data);
       axios.post("http://localhost:5005/searchhistory/", data).then((res) => {
         console.log(res.data);
-      });
+      })
+      .then((res) => alert("Query has been saved to your search history"));
     }
   }
 
@@ -280,7 +281,7 @@ class App extends Component {
       .then((response) => { playlistID = response.id})
       .then((response) => {
         spotifyWebApi.addTracksToPlaylist(playlistID, songs)
-          .then((response) => console.log("added songs to the playlist"))
+          .then((response) => alert("playlist has been added to your Account"))
       })
 
   }
