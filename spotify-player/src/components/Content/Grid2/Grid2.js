@@ -87,6 +87,7 @@ export default function Grid2(props){
                 const search = res.data.filter((id) => id.userId == props.user.userID);
                 setSearchHistory(search);
             })
+            .catch((err) => console.log(err));
     }, [props.user]);
 
         
