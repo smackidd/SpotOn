@@ -32,7 +32,7 @@ export default function MenuBar({loggedIn, userInfo}) {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Spot On
+                        Spotonify
                     </Typography>
                     {/* <Button color="inherit">Login</Button> */}
                     <Typography>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 import './App.css';
 import Button from '@material-ui/core/Button';
 import Spotify from 'spotify-web-api-js';
@@ -57,6 +58,7 @@ class App extends Component {
     
   }
 
+  
   componentDidUpdate(prevProps, prevState){
     if (prevState.searchName !== this.state.searchName){
       let data = {
@@ -94,6 +96,10 @@ class App extends Component {
   //     })
   // }
 
+
+  // this grabs the activity name and posts it as a search query
+  // it then grabs a list of 20 playlists
+  // and calls the method get5RandomPlaylists()
   searchPlaylists = (query) => {
     this.setState({query: [...this.state.query, query]})
     
@@ -111,8 +117,13 @@ class App extends Component {
         })
       })
       .then((response) => this.get5RandomPlaylists())
+      .catch((err) => console.log("Error: " + err));
   }
 
+  // this takes the list of 20 playlists and chooses 5 and random,
+  // so the user gets a new set of songs each time they click the same activity.
+  // It then loops through the 5 playlists, each time passing the id of the playlist
+  // to getPlaylistSongs();
   get5RandomPlaylists = () => {
     console.log('here');
     let index = 0;
@@ -133,9 +144,11 @@ class App extends Component {
     }
   }
 
+  // this takes the id of a playlist and grabs 50 sequential tracks from a random index within the playlist
   getPlaylistSongs = (id) => {
     console.log("id", id);
     let tracks = this.state.songListPreview;
+    
     const playlist = this.state.playlists.filter((playlist) => playlist.id === id)
     let total = playlist[0].numTracks;
     console.log("total", total);
@@ -152,24 +165,50 @@ class App extends Component {
     spotifyWebApi.getPlaylistTracks(id, { offset: offset, limit: limit })
       .then((response) => {
         console.log("response.items", response.items);
-        response.items.map((song) => {
-          let artists = '';
-          song.track.artists.map((artist, index) => {
-            artists += artist.name + ', ';
+        //put ids into an array so that we can call for audio_features
+        let songIds = [];
+        response.items.map((song) => songIds.push(song.track.id))
+        //get audio_features
+        let audio_features = [];
+        axios
+          .get(`https://api.spotify.com/v1/audio-features?ids=${songIds}`, {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.state.token}`
+            },
           })
-          let length = artists.length - 2;
-          let allArtists = artists.slice(0,length);
-          const track = {
-            name: song.track.name,
-            artist: allArtists,
-            id: song.track.uri  
-          }
-          tracks.push(track);
+          .then((res) => audio_features = res.data)
+          .then((res) => {
+            
+            //console.log("audio_features", audio_features);
+            response.items.map((song) => {
+              let artists = '';
+              song.track.artists.map((artist, index) => {
+                artists += artist.name + ', ';
+              })
+              let length = artists.length - 2;
+              let allArtists = artists.slice(0,length);
+              //filter song.id to matching audio_features id and pass to variable
+              
+              let song_af = audio_features.audio_features.filter((track) => track.id === song.track.id)
+
+              const track = {
+                name: song.track.name,
+                artist: allArtists,
+                id: song.track.uri,
+                track: song.track,
+                //push audio_features here
+                audioFeatures: song_af  
+              }
+            tracks.push(track);
+          })
+          //.catch((err) => alert("Error: " + err))
         })
-        
-      
       })
       .then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
+      
+      
        
      
      
@@ -187,6 +226,8 @@ class App extends Component {
     this.setState({showGenres: !this.state.showGenres})
   }
 
+  // this queues up the song that was clicked in the user's spotify queue list and then 
+  // skips to the next track, essentially playing the song that was clicked.
   playSong = (id) => {
     console.log("id", id);
     spotifyWebApi.queue(id)
