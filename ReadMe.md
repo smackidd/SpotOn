@@ -6,4 +6,7 @@ SpotOn\web-api-auth-examples\authorization_code\ --> node app.js
 To start the application:
 SpotOn\spotify-player\ --> npm start
 
+To start the backend:
+SpotOn\backend\node server.js
+
 a free Spotify account is required to use this app.
