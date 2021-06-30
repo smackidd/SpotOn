@@ -7,9 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client": "npm start --prefix spotify-player",
-    "auth": "node app.js --prefix authorization_code",
-    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run auth\""
+    "client": "npm start --prefix ../spotify-player",
+    "auth": "node app.js --prefix ../web-api-auth-examples/authorization_code",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run auth\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install -- prefix spotify-player && npm run build -- prefix spotify-player"
   },
   "keywords": [],
   "author": "",

@@ -296,7 +296,6 @@ export default function Grid2(props){
                         <ButtonGroup 
                             className="track" 
                             variant="outlined" 
-                            
                             size="small"
                         >
                             <Button 
