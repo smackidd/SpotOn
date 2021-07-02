@@ -67,7 +67,7 @@ export default function UserMenu({loggedIn, userInfo}) {
             <div>
             <Button 
                 //href="http://localhost:8888"
-                href="http://18.118.197.194:8888"
+                href="http://3.143.203.229:8888/"
                 variant="outlined"
                 className={classes.userButton}
                 style={loggedIn ? {display: 'none'} : {}}
