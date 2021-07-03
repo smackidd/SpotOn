@@ -81,7 +81,8 @@ export default function Grid2(props){
     //const [loadSearch, setLoadSearch] = React.useState([]);
 
     React.useEffect(() => {
-        axios.get("http://localhost:5005/searchhistory")
+        //axios.get("http://localhost:5005/searchhistory")
+        axios.get("http://18.188.194.19:5005/searchhistory")
             .then((res) => {
                 console.log("props.user.userID", props.user.userID, "res.data", res.data[0].userId);
                 const search = res.data.filter((id) => id.userId == props.user.userID);
