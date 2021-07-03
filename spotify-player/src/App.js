@@ -67,7 +67,8 @@ class App extends Component {
 	      "searchQuery": this.state.searchName  
       }
       console.log(data);
-      axios.post("http://localhost:5005/searchhistory/add", data).then((res) => {
+      //axios.post("http://localhost:5005/searchhistory/add", data).then((res) => {
+      axios.post("http://18.188.194.19:5005/searchhistory/add", data).then((res) => {
         console.log(res.data);
       })
       .then((res) => alert("Query has been saved to your search history"));
