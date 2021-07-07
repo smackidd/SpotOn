@@ -17,4 +17,7 @@ SpotOn\spotify-player\ --> npm start
 To start the backend:
 SpotOn\backend\node server.js
 
+This APP has also been deployed on AWS with CI/CD using Jenkins and Docker. You can find the app here: 
+bit.ly/3jP09a8
+
 a free Spotify account is required to use this app.
