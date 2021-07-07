@@ -8,6 +8,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
 
+const AUTH_PATH = process.env.REACT_APP_AUTH_PATH || "localhost";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -67,7 +69,7 @@ export default function UserMenu({loggedIn, userInfo}) {
             <div>
             <Button 
                 //href="http://localhost:8888"
-                href="http://3.143.203.229:8888/"
+                href={`http://${AUTH_PATH}:8888/`}
                 variant="outlined"
                 className={classes.userButton}
                 style={loggedIn ? {display: 'none'} : {}}

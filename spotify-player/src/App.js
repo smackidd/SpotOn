@@ -11,7 +11,7 @@ import Content from './components/Content/Content';
 
 
 const spotifyWebApi = new Spotify();
-
+const BACKEND_PATH = process.env.REACT_APP_BACKEND_PATH || "localhost";
 
 
 class App extends Component {
@@ -68,7 +68,8 @@ class App extends Component {
       }
       console.log(data);
       //axios.post("http://localhost:5005/searchhistory/add", data).then((res) => {
-      axios.post("http://3.135.199.139:5005/searchhistory/add", data).then((res) => {
+      //axios.post("http://3.135.199.139:5005/searchhistory/add", data).then((res) => {
+      axios.post(`http://${BACKEND_PATH}:5005/searchhistory/add`, data).then((res) => {
         console.log(res.data);
       })
       .then((res) => alert("Query has been saved to your search history"));

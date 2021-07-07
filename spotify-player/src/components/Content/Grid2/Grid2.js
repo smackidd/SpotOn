@@ -28,6 +28,7 @@ import Cooking from '../../../images/cooking.jpg';
 import Coding from '../../../images/coding.jpg';
 import Grid2Content from './Grid2Content';
 
+const BACKEND_PATH = process.env.REACT_APP_BACKEND_PATH || "localhost";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -79,10 +80,11 @@ export default function Grid2(props){
     const [searchHistory, setSearchHistory] = React.useState([]);
     
     //const [loadSearch, setLoadSearch] = React.useState([]);
-
+  
     React.useEffect(() => {
         //axios.get("http://localhost:5005/searchhistory")
-        axios.get("http://3.135.199.139:5005/searchhistory")
+        //axios.get("http://3.135.199.139:5005/searchhistory")
+        axios.get(`http://${BACKEND_PATH}:5005/searchhistory`)
             .then((res) => {
                 console.log("props.user.userID", props.user.userID, "res.data", res.data[0].userId);
                 const search = res.data.filter((id) => id.userId == props.user.userID);
