@@ -47,12 +47,16 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: "5px",
     },
     list: {
-        width: '25vw',
-        marginLeft: 50
+        //width: '25vw',
+        width: "100%",
+        margin: 1,
+        marginLeft: 5,
+        marginRight: 5
     },
     editButtons: {
         fontSize: 8,
         width: 40,
+        margin: 1
     },
     rootgrid: {
         marginTop: "5px",
@@ -188,7 +192,7 @@ export default function Grid2(props){
     const classes = useStyles();
     
     return (
-        <Grid container justify="center" style={{ flexGrow: 1, }} spacing={1}>
+        <Grid id="middle" container justify="center" style={{ flexGrow: 1 }} spacing={1}>
 
             {/*This displays the Activities*/}
 
@@ -297,9 +301,10 @@ export default function Grid2(props){
                     {props.songListPreview.map((song) => {
                         return (
                         <ButtonGroup 
-                            className="track" 
+                             
                             variant="outlined" 
                             size="small"
+                            className={classes.list}
                         >
                             <Button 
                             style={edit ? {} : {display: 'none'}}
@@ -310,23 +315,25 @@ export default function Grid2(props){
                             >
                             Delete</Button>
                             <Button  
-                            style={edit ? {} : {display: 'none'}}
-                            className={classes.editButtons}
-                            variant="contained" 
-                            color="inherit"
-                            onClick={() => props.addSong(song.id)}
-                            >
-                            Add</Button>
+                                style={edit ? {} : {display: 'none'}}
+                                className={classes.editButtons}
+                                variant="contained" 
+                                color="inherit"
+                                onClick={() => props.addSong(song.id)}
+                                >
+                                Add
+                            </Button>
                             <Button  
-                            key={song.id}
-                            variant="outlined"
-                            color="primary"
-                            justify-content="center" 
-                            className={classes.list}
-                            //style={{ flexGrow: 1, width: '80%', marginLeft: 20}}
-                            onClick={() => props.playSong(song.id)}
-                            >
-                            <div>{song.name} - {song.artist}</div>
+                                key={song.id}
+                                variant="outlined"
+                                color="primary"
+                                justify-content="center" 
+                                className={classes.list}
+                                //class="track"
+                                //style={{ flexGrow: 1, width: '80%', marginLeft: 20}}
+                                onClick={() => props.playSong(song.id)}
+                                >
+                                <div>{song.name} - {song.artist}</div>
                             </Button>
                         </ButtonGroup>
                         )

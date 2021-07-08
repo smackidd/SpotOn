@@ -15,14 +15,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#555",
         //boxShadow: "2px 2px 1px 1px #444",
         textAlign: "center",
+        paddingBottom: 25
     },
     list: {
-        width: '25vw',
+        width: "100%",
+        margin: 1,
         color: 'white',
+        border: 'white'
     },
     editButtons: {
         fontSize: 8,
         width: 40,
+        margin: 1
     },
 }));
 
