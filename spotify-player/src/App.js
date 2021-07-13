@@ -100,7 +100,7 @@ class App extends Component {
 
   // this runs through the flow of getting tracks from the spotifyapi
   getTracks = async (query) => {
-    let tracks = [];
+    let tracks = this.state.songListPreview;
     let playlists = await this.searchPlaylists(query);
     console.log("playlists", playlists);
     let indexes = await this.get5RandomPlaylists(playlists);
@@ -197,6 +197,7 @@ class App extends Component {
           tracks = response.items;
           resolve(tracks);
         })
+        .catch((err) => console.log(err))
       //.then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
     })     
   }
@@ -243,6 +244,7 @@ class App extends Component {
         resolve(tracks); 
         //.catch((err) => alert("Error: " + err))
       })
+      .catch((err) => console.log(err))
     })
     
   }        
