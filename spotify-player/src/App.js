@@ -100,7 +100,7 @@ class App extends Component {
 
   // this runs through the flow of getting tracks from the spotifyapi
   getTracks = async (query) => {
-    let tracks = [];
+    let tracks = this.state.songListPreview;
     let playlists = await this.searchPlaylists(query);
     console.log("playlists", playlists);
     let indexes = await this.get5RandomPlaylists(playlists);
