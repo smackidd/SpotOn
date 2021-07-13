@@ -13,6 +13,7 @@ const AUTH_PATH = process.env.REACT_APP_AUTH_PATH || "localhost";
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        zIndex: 10
     },
     paper: {
         marginRight: theme.spacing(2),
@@ -45,6 +46,11 @@ export default function UserMenu({loggedIn, userInfo}) {
 
         setOpen(false);
     };
+
+    const logout = (event) => {
+        const PATH = process.env.REACT_APP_HOME_PATH || "localhost";
+        document.location.href = `http://${PATH}:3000`;       
+    }
 
     function handleListKeyDown(event) {
         if (event.key === 'Tab') {
@@ -99,7 +105,7 @@ export default function UserMenu({loggedIn, userInfo}) {
                                     <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                                         <MenuItem onClick={handleClose}>My account</MenuItem>
-                                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                        <MenuItem onClick={logout}>Logout</MenuItem>
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>

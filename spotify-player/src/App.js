@@ -197,6 +197,7 @@ class App extends Component {
           tracks = response.items;
           resolve(tracks);
         })
+        .catch((err) => console.log(err))
       //.then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
     })     
   }
@@ -243,6 +244,7 @@ class App extends Component {
         resolve(tracks); 
         //.catch((err) => alert("Error: " + err))
       })
+      .catch((err) => console.log(err))
     })
     
   }        
