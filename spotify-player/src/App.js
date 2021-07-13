@@ -98,124 +98,155 @@ class App extends Component {
   //     })
   // }
 
+  // this runs through the flow of getting tracks from the spotifyapi
+  getTracks = async (query) => {
+    let tracks = [];
+    let playlists = await this.searchPlaylists(query);
+    console.log("playlists", playlists);
+    let indexes = await this.get5RandomPlaylists(playlists);
+    console.log("indexes", indexes);
+    indexes.forEach(async (i) => {
+      let trackIds = [];
+      const playlist = playlists.filter((playlist) => playlist.id === playlists[i].id);
+      let songs = await this.getPlaylistSongs(playlist);
+      //console.log("songs", songs);
+      songs.forEach((track) => {
+        trackIds.push(track.track.id);
+      })
+      console.log("songs", songs, "trackIds", trackIds);
+      let newTracks = await this.getSongAttributes(trackIds, songs);
+      newTracks.forEach((track) => {
+        tracks.push(track);
+      })
+      this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview))
+    })
+  }
+
 
   // this grabs the activity name and posts it as a search query
   // it then grabs a list of 20 playlists
   // and calls the method get5RandomPlaylists()
   searchPlaylists = (query) => {
-    this.setState({query: [...this.state.query, query]})
-    
-    spotifyWebApi.searchPlaylists(query, {limit: 20})
+    return new Promise((resolve, reject) => {
+      let playlists = []
+      spotifyWebApi.searchPlaylists(query, {limit: 20})
       .then((response) => {
         console.log(response.playlists.items);
-        this.setState({playlists: []})
         
         response.playlists.items.map((playlist) => {
-          this.setState({playlists: [...this.state.playlists, { 
+          playlists.push({ 
             name: playlist.name, 
             id: playlist.id, 
             numTracks: playlist.tracks.total, 
-            image: playlist.images[0].url}]})
+            image: playlist.images[0].url
+          })
         })
+        
+        resolve(playlists);
+        
       })
-      .then((response) => this.get5RandomPlaylists())
-      .catch((err) => console.log("Error: " + err));
+      .catch((err) => {console.log("Error: " + err); return [];});
+    })
   }
 
   // this takes the list of 20 playlists and chooses 5 and random,
   // so the user gets a new set of songs each time they click the same activity.
   // It then loops through the 5 playlists, each time passing the id of the playlist
   // to getPlaylistSongs();
-  get5RandomPlaylists = () => {
-    console.log('here');
-    let index = 0;
-    let indexList = [];
-    let duplicate = null
-    for (let i = 0; i < 5; i++){
-      index = Math.floor(Math.random() * 20);
-      duplicate = indexList.filter((num) => num === index);
-      console.log("duplicate", duplicate);
-      if (duplicate.length === 0){
-        indexList.push(index);
-        this.getPlaylistSongs(this.state.playlists[index].id);
-        console.log("index", index, "indexList", indexList, "i", i);
+  get5RandomPlaylists = (playlists) => {
+    return new Promise((resolve, reject) => {
+      console.log('here');
+      let index = 0;
+      let indexList = [];
+      let duplicate = null;
+      let length = playlists.length;
+      let tracks = this.state.songListPreview;
+      for (let i = 0; i < 5; i++){
+        index = Math.floor(Math.random() * length);
+        duplicate = indexList.filter((num) => num === index);
+        console.log("duplicate", duplicate);
+        if (duplicate.length === 0){
+          indexList.push(index);
+          duplicate = null;
+        }
+        else {
+          i--;
+          duplicate = null; 
+        } 
       }
-      else {
-        i--;
-      } 
-    }
+      resolve(indexList);
+    })
   }
 
   // this takes the id of a playlist and grabs 50 sequential tracks from a random index within the playlist
-  getPlaylistSongs = (id) => {
-    console.log("id", id);
-    let tracks = this.state.songListPreview;
-    
-    const playlist = this.state.playlists.filter((playlist) => playlist.id === id)
-    let total = playlist[0].numTracks;
-    console.log("total", total);
-    const limit = 50;
-    let offsetMax = 0;
-    if (total > limit) {
-      offsetMax = total - limit;
-    }
-    
-    
-    const offset = Math.floor(Math.random() * offsetMax)
+  getPlaylistSongs = (playlist) => {
+    //console.log("playlist", playlist);
+    return new Promise((resolve, reject) => {
+      let tracks = [];
+      let total = playlist[0].numTracks;
+      console.log("total", total);
+      const limit = 50;
+      let offsetMax = 0;
+      if (total > limit) {
+        offsetMax = total - limit - 1;
+      }
+      const offset = Math.floor(Math.random() * offsetMax)
 
-    
-    spotifyWebApi.getPlaylistTracks(id, { offset: offset, limit: limit })
-      .then((response) => {
-        console.log("response.items", response.items);
-        //put ids into an array so that we can call for audio_features
-        let songIds = [];
-        response.items.map((song) => songIds.push(song.track.id))
-        //get audio_features
-        let audio_features = [];
-        axios
-          .get(`https://api.spotify.com/v1/audio-features?ids=${songIds}`, {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${this.state.token}`
-            },
-          })
-          .then((res) => audio_features = res.data)
-          .then((res) => {
-            
-            //console.log("audio_features", audio_features);
-            response.items.map((song) => {
-              let artists = '';
-              song.track.artists.map((artist, index) => {
-                artists += artist.name + ', ';
-              })
-              let length = artists.length - 2;
-              let allArtists = artists.slice(0,length);
-              //filter song.id to matching audio_features id and pass to variable
-              
-              let song_af = audio_features.audio_features.filter((track) => track.id === song.track.id)
-
-              const track = {
-                name: song.track.name,
-                artist: allArtists,
-                id: song.track.uri,
-                track: song.track,
-                //push audio_features here
-                audioFeatures: song_af  
-              }
-            tracks.push(track);
-          })
-          //.catch((err) => alert("Error: " + err))
+      spotifyWebApi.getPlaylistTracks(playlist[0].id, { offset: offset, limit: limit })
+        .then((response) => {
+          tracks = response.items;
+          resolve(tracks);
         })
-      })
-      .then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
-      
-      
-       
-     
-     
-      
+      //.then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
+    })     
   }
+
+  getSongAttributes = (ids, songs) => {
+    return new Promise((resolve, reject) => {
+      //get audio_features
+      console.log("ids", ids);
+      let audio_features = [];
+      axios
+      .get(`https://api.spotify.com/v1/audio-features?ids=${ids}`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.state.token}`
+        },
+      })
+      .then((res) => {audio_features = res.data; console.log("res.data", res.data);})
+      .then((res) => {
+        let tracks = [];
+        //console.log("audio_features", audio_features);
+        songs.map((song) => {
+          let artists = '';
+          song.track.artists.map((artist, index) => {
+            artists += artist.name + ', ';
+          })
+          let length = artists.length - 2;
+          let allArtists = artists.slice(0,length);
+          //filter song.id to matching audio_features id and pass to variable
+          
+          let song_af = audio_features.audio_features.filter((track) => track.id === song.track.id)
+
+          const track = {
+            name: song.track.name,
+            artist: allArtists,
+            id: song.track.uri,
+            track: song.track,
+            //push audio_features here
+            audioFeatures: song_af[0]  
+          }
+          tracks.push(track);
+        })
+        
+        resolve(tracks); 
+        //.catch((err) => alert("Error: " + err))
+      })
+    })
+    
+  }        
+  
 
   //toggles the display of the Activities in Column 2
   
@@ -352,7 +383,7 @@ class App extends Component {
           //showActivities={this.state.showActivities}
           //onShowGenres={this.onShowGenres}
           //showGenres={this.state.showGenres}
-          searchPlaylists={this.searchPlaylists}
+          getTracks={this.getTracks}
           songListPreview={this.state.songListPreview}
           playSong={this.playSong}
           clearPlaylist={this.clearPlaylist}

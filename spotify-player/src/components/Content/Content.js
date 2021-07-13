@@ -24,7 +24,7 @@ export default function SpacingGrid(
         //onShowActivities,
         //showGenres,
         //onShowGenres, 
-        searchPlaylists, 
+        getTracks, 
         songListPreview, 
         playSong, 
         clearPlaylist, 
@@ -80,7 +80,7 @@ export default function SpacingGrid(
                         user={user}
                         expanded={expanded}
                         setExpanded={(expanded) => setExpanded(expanded)} 
-                        searchPlaylists={searchPlaylists}
+                        getTracks={getTracks}
                         handleChange={(event) => handleChange(event)}
                         songListPreview={songListPreview}
                         playSong={playSong} 

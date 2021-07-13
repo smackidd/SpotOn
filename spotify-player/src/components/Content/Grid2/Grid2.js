@@ -127,7 +127,7 @@ export default function Grid2(props){
         console.log("onHandleActivities", props);
         props.setExpanded(false);
         
-        props.searchPlaylists(query);
+        props.getTracks(query);
         
     }
 
@@ -139,7 +139,7 @@ export default function Grid2(props){
         })
         const index = searchTerm.lastIndexOf(" OR ");
         searchTerm = searchTerm.slice(0,index);
-        props.searchPlaylists(searchTerm);
+        props.getTracks(searchTerm);
         console.log(genres, queries);
     }
 
