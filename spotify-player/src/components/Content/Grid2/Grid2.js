@@ -125,9 +125,9 @@ export default function Grid2(props){
 
     function onHandleActivities(query) {
         console.log("onHandleActivities", props);
-        props.setExpanded(false);
-        
-        props.getTracks(query);
+        props.setActive(false);
+        props.setFilters({...props.filters, panel1: query});
+        //props.getTracks(query);
         
     }
 
@@ -201,7 +201,7 @@ export default function Grid2(props){
                 justify="center" 
                 className={classes.root} 
                 cols={3}
-                style={props.expanded === 'panel1' ? {} : {display: 'none'}}
+                style={props.active === 'panel1' ? {} : {display: 'none'}}
             >
                 {image.map((pic) => (
                     <GridListTile 
@@ -280,7 +280,7 @@ export default function Grid2(props){
                 </FormControl>
                 
             </GridList>
-            <div style={props.expanded === false ? {} : {display: 'none'}}>
+            <div style={props.active === false ? {} : {display: 'none'}}>
                 <h2>Preview List: {props.songListPreview.length} songs</h2>
                 <ButtonGroup variant="text" color="secondary">
                     <Button  onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>

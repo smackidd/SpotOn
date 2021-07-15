@@ -40,18 +40,28 @@ export default function SpacingGrid(
     }) {
     const classes = useStyles();
 
-    const [expanded, setExpanded] = React.useState(false);
+    const [active, setActive] = React.useState(false);
+    const [expanded, setExpanded] = React.useState({
+        panel1: false,
+        panel2: false
+    });
+    const [filters, setFilters] = React.useState({
+        panel1: null,
+        panel2: null
+    });
 
     const handleChange = (panel) => (event, isExpanded) => {
-        console.log("handleChange", panel, isExpanded);
-        setExpanded(isExpanded ? panel : false);
+        //console.log("handleChange", panel, isExpanded);
+        //const panel1 = this.state.filters.panel1;
+        setExpanded(isExpanded ? {...expanded, [panel]: true} : false);
+        setActive(panel);
     };
 
     
     
-    const changeExpandedActivities = (panel) => {
-        setExpanded(!expanded);
-    }
+    // const changeExpandedActivities = (panel) => {
+    //     setExpanded(!expanded);
+    // }
 
     return (
         <div>
@@ -72,6 +82,7 @@ export default function SpacingGrid(
                         //onShowGenres={onShowGenres} 
                         expanded={expanded}
                         handleChange={(event) => handleChange(event)}
+                        filters={filters}
                         //handleChangeGenres={() => changeExpandedGenres()}
                     />
                 </Grid>
@@ -79,6 +90,10 @@ export default function SpacingGrid(
                     <Grid2
                         user={user}
                         expanded={expanded}
+                        active={active}
+                        filters={filters}
+                        setActive={setActive}
+                        setFilters={setFilters}
                         setExpanded={(expanded) => setExpanded(expanded)} 
                         getTracks={getTracks}
                         handleChange={(event) => handleChange(event)}
