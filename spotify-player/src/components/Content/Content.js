@@ -45,10 +45,7 @@ export default function SpacingGrid(
         panel1: false,
         panel2: false
     });
-    const [filters, setFilters] = React.useState({
-        panel1: null,
-        panel2: null
-    });
+    const [filters, setFilters] = React.useState(false);
 
     const handleChange = (panel) => (event, isExpanded) => {
         //console.log("handleChange", panel, isExpanded);
@@ -83,6 +80,7 @@ export default function SpacingGrid(
                         expanded={expanded}
                         handleChange={(event) => handleChange(event)}
                         filters={filters}
+                        getTracks={getTracks}
                         //handleChangeGenres={() => changeExpandedGenres()}
                     />
                 </Grid>

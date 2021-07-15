@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Grid1(props) {
     const classes = useStyles();
-    const { expanded, handleChange, filters } = props;
+    const { expanded, handleChange, filters, getTracks } = props;
 
     
     
@@ -102,7 +102,7 @@ export default function Grid1(props) {
             </Accordion>
             <ButtonGroup variant="contained" color="primary"  orientation="vertical" size="medium" className={classes.buttons}>
                 <Button variant="outlined">Clear</Button>
-                <Button>Generate Preview</Button>
+                <Button disabled={filters ? false : true} onClick={(event) => getTracks(filters.panel1)}>Generate Preview</Button>
             </ButtonGroup>
         </div>
     );
