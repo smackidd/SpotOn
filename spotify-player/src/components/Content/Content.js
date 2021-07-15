@@ -64,7 +64,7 @@ export default function SpacingGrid(
                 
                 >
                 
-                <Grid item xs={12} sm={3} className={classes.griditem}>
+                <Grid item xs={12} sm={2} className={classes.griditem} >
                     <Grid1
                         //handleDisplay={(event) => handleDisplay(event)}
                         //isDisplayed={isDisplayed} 
@@ -92,7 +92,7 @@ export default function SpacingGrid(
                         saveSearchHistory={saveSearchHistory}
                     />
                 </Grid>
-                <Grid item xs={12} sm={4} className={classes.griditem}>
+                <Grid item xs={12} sm={5} className={classes.griditem}>
                     <Grid3 
                         name="Grid3"
                         playSong={playSong}

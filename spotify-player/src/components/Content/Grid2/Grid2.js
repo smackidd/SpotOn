@@ -281,7 +281,7 @@ export default function Grid2(props){
                 
             </GridList>
             <div style={props.expanded === false ? {} : {display: 'none'}}>
-                <p>Preview List: {props.songListPreview.length} songs</p>
+                <h2>Preview List: {props.songListPreview.length} songs</h2>
                 <ButtonGroup variant="text" color="secondary">
                     <Button  onClick={() => props.transferPlaylist()}>Transfer {props.transferSize}</Button><br/>
                     <Button onClick={() => editPlaylist()}>Edit</Button>

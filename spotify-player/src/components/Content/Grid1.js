@@ -7,11 +7,17 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        
     },
+    buttons: {
+        marginTop: "12px",
+        
+    }, 
     heading: {
         fontSize: "100%",
         fontWeight: "bold",
@@ -33,6 +39,8 @@ export default function Grid1({ handleDisplay, isDisplayed,/*onShowActivities, o
 
     return (
         <div className={classes.root}>
+            <h2>Filter List:</h2>
+            
             <Accordion 
                 name="Activities"
                 expanded={expanded === 'panel1'} 
@@ -91,6 +99,10 @@ export default function Grid1({ handleDisplay, isDisplayed,/*onShowActivities, o
                     </Typography>
                 </AccordionDetails>
             </Accordion>
+            <ButtonGroup variant="contained" color="primary"  orientation="vertical" size="medium" className={classes.buttons}>
+                <Button variant="outlined">Clear</Button>
+                <Button>Generate Preview</Button>
+            </ButtonGroup>
         </div>
     );
 }
