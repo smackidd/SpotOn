@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Grid1 from './Grid1';
+import Grid1 from './Grid1/Grid1';
 import Grid2 from './Grid2/Grid2';
 import Grid3 from './Grid3';
 

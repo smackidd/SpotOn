@@ -9,6 +9,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
+import PreivewListSlider from './Sliders/PreviewListSlider';
+import FinalListSlider from './Sliders/FinalListSlider';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -101,6 +104,10 @@ export default function Grid1(props) {
                     </Typography>
                 </AccordionDetails>
             </Accordion>
+
+            <PreivewListSlider></PreivewListSlider>
+            <FinalListSlider></FinalListSlider>
+
             <ButtonGroup variant="contained" color="primary"  orientation="vertical" size="medium" className={classes.buttons}>
                 <Button variant="outlined">Clear</Button>
                 <Button disabled={filters ? false : true} onClick={(event) => getTracks(filters.panel1)}>Generate Preview</Button>
