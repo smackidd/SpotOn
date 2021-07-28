@@ -55,13 +55,14 @@ export default function Grid1(props) {
                         //     event.stopPropagation();
                         //     alert("Hello");
                         // }}
+                        // onFocus={(event) => event.stopPropagation()}
                     >
-                        Choose Activity
+                        Choose Activity {filters.panel1 && <p>{" - " + filters.panel1}</p>}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography className={classes.details}>
-                        {filters.panel1 || "Choose 1"}
+                        {"Choose 1"}
                     </Typography>
                 </AccordionDetails>
             </Accordion>

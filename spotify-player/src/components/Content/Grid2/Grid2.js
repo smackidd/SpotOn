@@ -26,6 +26,9 @@ import Walking from '../../../images/walking.jpg';
 import Sleeping from '../../../images/sleeping.jpg';
 import Cooking from '../../../images/cooking.jpg';
 import Coding from '../../../images/coding.jpg';
+import Reading from '../../../images/reading.jpg';
+import Gaming from '../../../images/gaming.jpg';
+import Sports from '../../../images/sports.jpg';
 import Grid2Content from './Grid2Content';
 
 const BACKEND_PATH = process.env.REACT_APP_BACKEND_PATH || "localhost";
@@ -98,34 +101,49 @@ export default function Grid2(props){
     }, [props.user]);
 
         
-    const image = [{
-        image: Road_Trip,
-        imageName: "Road Trip"    
-    },
-    {
-        image: Running,
-        imageName: "Running"
-    },
-    {
-        image: Walking,
-        imageName: "Walking" 
-    },
-    {
-        image: Sleeping,
-        imageName: "Sleeping"
-    },
-    {
-        image: Cooking,
-        imageName: "Cooking"
-    },
-    {
-        image: Coding,
-        imageName: "Coding"
-    }]
+    const image = [
+        {
+            image: Road_Trip,
+            imageName: "Road Trip"    
+        },
+        {
+            image: Running,
+            imageName: "Running"
+        },
+        {
+            image: Walking,
+            imageName: "Walking" 
+        },
+        {
+            image: Sleeping,
+            imageName: "Sleeping"
+        },
+        {
+            image: Cooking,
+            imageName: "Cooking"
+        },
+        {
+            image: Coding,
+            imageName: "Coding"
+        },
+        {   
+            image: Reading,
+            imageName: "Reading"
+        },
+        {
+            image: Gaming,
+            imageName: "Gaming"
+        },
+        {
+            image: Sports,
+            imageName: "Sports"
+        }
+    ]
 
     function onHandleActivities(query) {
         console.log("onHandleActivities", props);
         props.setActive(false);
+        props.setExpanded(false);
         props.setFilters({...props.filters, panel1: query});
         //props.getTracks(query);
         

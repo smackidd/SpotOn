@@ -110,9 +110,12 @@ class App extends Component {
       const playlist = playlists.filter((playlist) => playlist.id === playlists[i].id);
       let songs = await this.getPlaylistSongs(playlist);
       //console.log("songs", songs);
+      
       songs.forEach((track) => {
-        trackIds.push(track.track.id);
+        if (track.track.id != null) trackIds.push(track.track.id);
       })
+      
+      
       console.log("songs", songs, "trackIds", trackIds);
       let newTracks = await this.getSongAttributes(trackIds, songs);
       newTracks.forEach((track) => {
@@ -197,7 +200,7 @@ class App extends Component {
           tracks = response.items;
           resolve(tracks);
         })
-        .catch((err) => console.log(err))
+        .catch((err) => reject(err))
       //.then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
     })     
   }
@@ -227,8 +230,9 @@ class App extends Component {
           let length = artists.length - 2;
           let allArtists = artists.slice(0,length);
           //filter song.id to matching audio_features id and pass to variable
+          let valid_af = audio_features.audio_features.filter((track) => track !== null)
           
-          let song_af = audio_features.audio_features.filter((track) => track.id === song.track.id)
+          let song_af = valid_af.filter((track) => track.id === song.track.id)
 
           const track = {
             name: song.track.name,
@@ -244,7 +248,7 @@ class App extends Component {
         resolve(tracks); 
         //.catch((err) => alert("Error: " + err))
       })
-      .catch((err) => console.log(err))
+      .catch((err) => reject(err))
     })
     
   }        

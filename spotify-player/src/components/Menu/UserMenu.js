@@ -49,7 +49,8 @@ export default function UserMenu({loggedIn, userInfo}) {
 
     const logout = (event) => {
         const PATH = process.env.REACT_APP_HOME_PATH || "localhost";
-        document.location.href = `http://${PATH}:3000`;       
+        const PORT = process.env.REACT_APP_HOME_PORT || 3000;
+        document.location.href = `http://${PATH}:${PORT}`;      
     }
 
     function handleListKeyDown(event) {
