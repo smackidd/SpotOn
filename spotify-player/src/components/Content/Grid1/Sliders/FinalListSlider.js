@@ -32,10 +32,12 @@ export default function FinalListSlider(props) {
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
+    props.handleFinalListSize(newValue);
   };
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? '' : Number(event.target.value));
+    props.handleFinalListSize(event.target.value);
   };
 
   const handleBlur = () => {

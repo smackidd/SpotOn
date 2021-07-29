@@ -26,6 +26,7 @@ class App extends Component {
       display: false,
       showActivities: false,
       showGenres: false,
+      previewListSize: 250,
       transferSize: 50,
       maxTransferSize: 50,
       user: [],
@@ -97,6 +98,14 @@ class App extends Component {
   //       })
   //     })
   // }
+
+  handlePreviewListSize = (size) => {
+    this.setState({previewListSize: size});
+  }
+
+  handleFinalListSize = (size) => {
+    this.setState({maxTransferSize: size, transferSize: size});
+  }
 
   // this runs through the flow of getting tracks from the spotifyapi
   getTracks = async (query) => {
@@ -402,6 +411,8 @@ class App extends Component {
           deleteTrackFinal={this.deleteTrackFinal}
           savePlaylistToLibrary={this.savePlaylistToLibrary}
           saveSearchHistory={(name) => this.saveSearchHistory(name)}
+          handlePreviewListSize={(size) => this.handlePreviewListSize(size)}
+          handleFinalListSize={(size) => this.handleFinalListSize(size)}
         />
         
       

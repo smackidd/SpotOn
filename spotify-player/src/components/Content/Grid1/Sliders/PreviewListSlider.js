@@ -32,10 +32,12 @@ export default function PreiviewListSlider(props) {
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
+    props.handlePreviewListSize(newValue);
   };
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? '' : Number(event.target.value));
+    props.handlePreviewListSize(event.target.value);
   };
 
   const handleBlur = () => {

@@ -36,7 +36,9 @@ export default function SpacingGrid(
         clearFinalPlaylist,
         deleteTrackFinal,
         savePlaylistToLibrary,
-        saveSearchHistory
+        saveSearchHistory,
+        handlePreviewListSize,
+        handleFinalListSize
     }) {
     const classes = useStyles();
 
@@ -81,6 +83,8 @@ export default function SpacingGrid(
                         handleChange={(event) => handleChange(event)}
                         filters={filters}
                         getTracks={getTracks}
+                        handlePreviewListSize={(size) => handlePreviewListSize(size)}
+                        handleFinalListSize={(size) => handleFinalListSize(size)}
                         //handleChangeGenres={() => changeExpandedGenres()}
                     />
                 </Grid>

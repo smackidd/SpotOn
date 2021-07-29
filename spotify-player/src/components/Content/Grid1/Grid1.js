@@ -36,7 +36,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Grid1(props) {
     const classes = useStyles();
-    const { expanded, handleChange, filters, getTracks } = props;
+    const { 
+        expanded, 
+        handleChange,
+        filters, 
+        getTracks,
+        handlePreviewListSize,
+        handleFinalListSize
+    } = props;
 
     
     
@@ -105,8 +112,8 @@ export default function Grid1(props) {
                 </AccordionDetails>
             </Accordion>
 
-            <PreivewListSlider></PreivewListSlider>
-            <FinalListSlider></FinalListSlider>
+            <PreivewListSlider handlePreviewListSize={handlePreviewListSize}></PreivewListSlider>
+            <FinalListSlider handleFinalListSize={handleFinalListSize}></FinalListSlider>
 
             <ButtonGroup variant="contained" color="primary"  orientation="vertical" size="medium" className={classes.buttons}>
                 <Button variant="outlined">Clear</Button>
