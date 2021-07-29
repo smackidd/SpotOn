@@ -104,7 +104,12 @@ class App extends Component {
   }
 
   handleFinalListSize = (size) => {
-    this.setState({maxTransferSize: size, transferSize: size});
+    let finalListSize = 0;
+    if (size - this.state.finalList.length > 0) finalListSize = size - this.state.finalList.length;
+    //////
+    // adjust finalList song list if finalListSize is below this.state.finalList.length
+    //////
+    this.setState({maxTransferSize: size, transferSize: finalListSize});
   }
 
   // this runs through the flow of getting tracks from the spotifyapi
@@ -114,7 +119,8 @@ class App extends Component {
     console.log("playlists", playlists);
     let indexes = await this.get5RandomPlaylists(playlists);
     console.log("indexes", indexes);
-    indexes.forEach(async (i) => {
+    indexes.every(async (i) => {
+      if (tracks.length >= this.state.previewListSize) return false;
       let trackIds = [];
       const playlist = playlists.filter((playlist) => playlist.id === playlists[i].id);
       let songs = await this.getPlaylistSongs(playlist);
@@ -128,9 +134,10 @@ class App extends Component {
       console.log("songs", songs, "trackIds", trackIds);
       let newTracks = await this.getSongAttributes(trackIds, songs);
       newTracks.forEach((track) => {
-        tracks.push(track);
+        if (tracks.length < this.state.previewListSize) tracks.push(track);
       })
       this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview))
+      
     })
   }
 
@@ -161,9 +168,9 @@ class App extends Component {
     })
   }
 
-  // this takes the list of 20 playlists and chooses 5 and random,
+  // this takes the list of 20 playlists and randomizes the order,
   // so the user gets a new set of songs each time they click the same activity.
-  // It then loops through the 5 playlists, each time passing the id of the playlist
+  // It then loops through the 20 playlists, each time passing the id of the playlist
   // to getPlaylistSongs();
   get5RandomPlaylists = (playlists) => {
     return new Promise((resolve, reject) => {
@@ -173,7 +180,7 @@ class App extends Component {
       let duplicate = null;
       let length = playlists.length;
       let tracks = this.state.songListPreview;
-      for (let i = 0; i < 5; i++){
+      for (let i = 0; i < 20; i++){
         index = Math.floor(Math.random() * length);
         duplicate = indexList.filter((num) => num === index);
         console.log("duplicate", duplicate);
