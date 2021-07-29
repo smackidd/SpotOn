@@ -41,10 +41,10 @@ export default function FinalListSlider(props) {
   };
 
   const handleBlur = () => {
-    if (value < 50) {
-      setValue(50);
-    } else if (value > 500) {
-      setValue(500);
+    if (value < 25) {
+      setValue(25);
+    } else if (value > 100) {
+      setValue(100);
     }
   };
 
@@ -58,7 +58,7 @@ export default function FinalListSlider(props) {
           <Slider
             value={typeof value === 'number' ? value : 50}
             min={25}
-            max={300}
+            max={100}
             onChange={handleSliderChange}
             aria-labelledby="input-slider"
           />
@@ -72,7 +72,7 @@ export default function FinalListSlider(props) {
             onBlur={handleBlur}
             inputProps={{
               min: 25,
-              max: 300,
+              max: 100,
               type: 'number',
               'aria-labelledby': 'input-slider',
             }}
