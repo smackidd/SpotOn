@@ -1,3 +1,6 @@
+<h2>This APP has also been deployed on AWS with CI/CD using Jenkins and Docker. You can find the app here: 
+https://bit.ly/3jP09a8</h2>
+
 The SpotOn app allows a user to choose an activity. The app will assist in rapidly creating a new Spotify playlist around the search query that relates to that activity.
 
 A user can select an activity and/or genre. A list of songs will populate the center of the app. <br/>
@@ -17,7 +20,6 @@ SpotOn\spotify-player\ --> npm start
 To start the backend:
 SpotOn\backend\node server.js
 
-This APP has also been deployed on AWS with CI/CD using Jenkins and Docker. You can find the app here: 
-https://bit.ly/3jP09a8
+
 
 a free Spotify account is required to use this app.
