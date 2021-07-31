@@ -10,7 +10,7 @@ import UserMenu from './UserMenu';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     menuButton: {
         marginRight: '5px',
@@ -32,7 +32,7 @@ export default function MenuBar({loggedIn, userInfo}) {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Spotonify
+                        Spiffy Spotify Playlists
                     </Typography>
                     {/* <Button color="inherit">Login</Button> */}
                     <Typography>
