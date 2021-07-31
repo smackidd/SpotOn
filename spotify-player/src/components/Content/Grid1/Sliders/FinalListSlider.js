@@ -32,20 +32,23 @@ export default function FinalListSlider(props) {
 
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handleSliderChangeCommitted = (event, newValue) => {
     props.handleFinalListSize(newValue);
   };
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? '' : Number(event.target.value));
-    props.handleFinalListSize(event.target.value);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (event) => {
     if (value < 25) {
       setValue(25);
     } else if (value > 100) {
       setValue(100);
     }
+    props.handleFinalListSize(event.target.value);
   };
 
   return (
@@ -60,6 +63,7 @@ export default function FinalListSlider(props) {
             min={25}
             max={100}
             onChange={handleSliderChange}
+            onChangeCommitted={handleSliderChangeCommitted}
             aria-labelledby="input-slider"
           />
         </Grid>

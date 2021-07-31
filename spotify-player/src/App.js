@@ -105,11 +105,15 @@ class App extends Component {
 
   handleFinalListSize = (size) => {
     let finalListSize = 0;
-    if (size - this.state.finalList.length > 0) finalListSize = size - this.state.finalList.length;
+    let finalListLength = this.state.finalList.length;
+    let finalList = this.state.finalList;
+    if (size - finalListLength > 0) finalListSize = size - finalListLength;
+    else finalList = this.state.finalList.splice(0, size);
     //////
     // adjust finalList song list if finalListSize is below this.state.finalList.length
+    // must wait til focus of slider is off before setting finalList state. 
     //////
-    this.setState({maxTransferSize: size, transferSize: finalListSize});
+    this.setState({maxTransferSize: size, transferSize: finalListSize, finalList: finalList});
   }
 
   // this runs through the flow of getting tracks from the spotifyapi
@@ -127,7 +131,7 @@ class App extends Component {
       //console.log("songs", songs);
       
       songs.forEach((track) => {
-        if (track.track.id != null) trackIds.push(track.track.id);
+        if (track.track.id) trackIds.push(track.track.id);
       })
       
       
