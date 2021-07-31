@@ -26,6 +26,7 @@ class App extends Component {
       display: false,
       showActivities: false,
       showGenres: false,
+      previewListSize: 250,
       transferSize: 50,
       maxTransferSize: 50,
       user: [],
@@ -98,6 +99,23 @@ class App extends Component {
   //     })
   // }
 
+  handlePreviewListSize = (size) => {
+    this.setState({previewListSize: size});
+  }
+
+  handleFinalListSize = (size) => {
+    let finalListSize = 0;
+    let finalListLength = this.state.finalList.length;
+    let finalList = this.state.finalList;
+    if (size - finalListLength > 0) finalListSize = size - finalListLength;
+    else finalList = this.state.finalList.splice(0, size);
+    //////
+    // adjust finalList song list if finalListSize is below this.state.finalList.length
+    // must wait til focus of slider is off before setting finalList state. 
+    //////
+    this.setState({maxTransferSize: size, transferSize: finalListSize, finalList: finalList});
+  }
+
   // this runs through the flow of getting tracks from the spotifyapi
   getTracks = async (query) => {
     let tracks = this.state.songListPreview;
@@ -105,20 +123,25 @@ class App extends Component {
     console.log("playlists", playlists);
     let indexes = await this.get5RandomPlaylists(playlists);
     console.log("indexes", indexes);
-    indexes.forEach(async (i) => {
+    indexes.every(async (i) => {
+      if (tracks.length >= this.state.previewListSize) return false;
       let trackIds = [];
       const playlist = playlists.filter((playlist) => playlist.id === playlists[i].id);
       let songs = await this.getPlaylistSongs(playlist);
       //console.log("songs", songs);
+      
       songs.forEach((track) => {
-        trackIds.push(track.track.id);
+        if (track.track.id) trackIds.push(track.track.id);
       })
+      
+      
       console.log("songs", songs, "trackIds", trackIds);
       let newTracks = await this.getSongAttributes(trackIds, songs);
       newTracks.forEach((track) => {
-        tracks.push(track);
+        if (tracks.length < this.state.previewListSize) tracks.push(track);
       })
       this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview))
+      
     })
   }
 
@@ -149,9 +172,9 @@ class App extends Component {
     })
   }
 
-  // this takes the list of 20 playlists and chooses 5 and random,
+  // this takes the list of 20 playlists and randomizes the order,
   // so the user gets a new set of songs each time they click the same activity.
-  // It then loops through the 5 playlists, each time passing the id of the playlist
+  // It then loops through the 20 playlists, each time passing the id of the playlist
   // to getPlaylistSongs();
   get5RandomPlaylists = (playlists) => {
     return new Promise((resolve, reject) => {
@@ -161,7 +184,7 @@ class App extends Component {
       let duplicate = null;
       let length = playlists.length;
       let tracks = this.state.songListPreview;
-      for (let i = 0; i < 5; i++){
+      for (let i = 0; i < 20; i++){
         index = Math.floor(Math.random() * length);
         duplicate = indexList.filter((num) => num === index);
         console.log("duplicate", duplicate);
@@ -197,7 +220,7 @@ class App extends Component {
           tracks = response.items;
           resolve(tracks);
         })
-        .catch((err) => console.log(err))
+        .catch((err) => reject(err))
       //.then((response) => this.setState({songListPreview: tracks}, () => console.log("songListPreview updated", this.state.songListPreview)))
     })     
   }
@@ -227,8 +250,9 @@ class App extends Component {
           let length = artists.length - 2;
           let allArtists = artists.slice(0,length);
           //filter song.id to matching audio_features id and pass to variable
+          let valid_af = audio_features.audio_features.filter((track) => track !== null)
           
-          let song_af = audio_features.audio_features.filter((track) => track.id === song.track.id)
+          let song_af = valid_af.filter((track) => track.id === song.track.id)
 
           const track = {
             name: song.track.name,
@@ -244,7 +268,7 @@ class App extends Component {
         resolve(tracks); 
         //.catch((err) => alert("Error: " + err))
       })
-      .catch((err) => console.log(err))
+      .catch((err) => reject(err))
     })
     
   }        
@@ -398,6 +422,8 @@ class App extends Component {
           deleteTrackFinal={this.deleteTrackFinal}
           savePlaylistToLibrary={this.savePlaylistToLibrary}
           saveSearchHistory={(name) => this.saveSearchHistory(name)}
+          handlePreviewListSize={(size) => this.handlePreviewListSize(size)}
+          handleFinalListSize={(size) => this.handleFinalListSize(size)}
         />
         
       

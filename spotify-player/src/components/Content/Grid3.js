@@ -52,7 +52,7 @@ export default function Grid3(props) {
         <div>
             <Paper className={classes.paper}>
                 <div>
-                    <p>Final List: {props.finalList.length} songs</p>
+                    <h2>Final List: {props.finalList.length} songs</h2>
                     <ButtonGroup variant="text" color="secondary">
                         <Button onClick={() => editFinalPlaylist()}>Edit</Button>
                         <Button onClick={() => props.clearFinalPlaylist()}>Clear</Button>

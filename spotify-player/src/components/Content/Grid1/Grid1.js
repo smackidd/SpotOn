@@ -7,13 +7,22 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+import PreivewListSlider from './Sliders/PreviewListSlider';
+import FinalListSlider from './Sliders/FinalListSlider';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
+        
     },
+    buttons: {
+        marginTop: "12px",
+        
+    }, 
     heading: {
-        fontSize: "100%",
+        fontSize: "75%",
         fontWeight: "bold",
         flexGrow: 1,
     },
@@ -21,21 +30,31 @@ const useStyles = makeStyles((theme) => ({
         //backgroundColor: "#f4eded",
     },
     details: {
-        fontSize: "90%",
+        fontSize: "80%",
     },
 }));
 
-export default function Grid1({ handleDisplay, isDisplayed,/*onShowActivities, onShowGenres,*/ handleChange, expanded}) {
+export default function Grid1(props) {
     const classes = useStyles();
+    const { 
+        expanded, 
+        handleChange,
+        filters, 
+        getTracks,
+        handlePreviewListSize,
+        handleFinalListSize
+    } = props;
 
     
     
 
     return (
         <div className={classes.root}>
+            <h2>Filter List:</h2>
+            
             <Accordion 
                 name="Activities"
-                expanded={expanded === 'panel1'} 
+                expanded={expanded.panel1} 
                 onChange={handleChange('panel1')} 
                 //onClick={handleChange('panel1')}
                 >
@@ -46,20 +65,21 @@ export default function Grid1({ handleDisplay, isDisplayed,/*onShowActivities, o
                         //     event.stopPropagation();
                         //     alert("Hello");
                         // }}
+                        // onFocus={(event) => event.stopPropagation()}
                     >
-                        Choose Activity
+                        Choose Activity {filters.panel1 && <p>{" - " + filters.panel1}</p>}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography className={classes.details}>
-                        Choose 1
+                        {"Choose 1"}
                     </Typography>
                 </AccordionDetails>
             </Accordion>
             <Accordion
                 name="genres"
-                expanded={expanded === 'panel2'} 
-                onChange={handleChange('panel2')}
+                // expanded={expanded === 'panel2'} 
+                // onChange={handleChange('panel2')}
                 //onClick={handleChange('panel2')}
                 >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} className={classes.summary}>
@@ -91,6 +111,14 @@ export default function Grid1({ handleDisplay, isDisplayed,/*onShowActivities, o
                     </Typography>
                 </AccordionDetails>
             </Accordion>
+
+            <PreivewListSlider handlePreviewListSize={handlePreviewListSize}></PreivewListSlider>
+            <FinalListSlider handleFinalListSize={handleFinalListSize}></FinalListSlider>
+
+            <ButtonGroup variant="contained" color="primary"  orientation="vertical" size="medium" className={classes.buttons}>
+                <Button variant="outlined">Clear</Button>
+                <Button disabled={filters ? false : true} onClick={(event) => getTracks(filters.panel1)}>Generate Preview</Button>
+            </ButtonGroup>
         </div>
     );
 }
